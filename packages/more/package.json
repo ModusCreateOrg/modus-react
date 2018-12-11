@@ -48,7 +48,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "./bin/more.js pre-commit"
     }
   },
   "prettier": {
