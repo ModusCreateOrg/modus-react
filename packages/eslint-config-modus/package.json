@@ -1,0 +1,18 @@
+{
+  "name": "@modus/eslint-config-modus",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Modus Create <contact@moduscreate.com>",
+  "dependencies": {
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-prettier": "3.3.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-prettier": "3.0.0",
+    "eslint-plugin-react": "7.11.1"
+  },
+  "peerDependencies": {
+    "eslint": ">= 5",
+    "prettier": ">= 1.15"
+  }
+}

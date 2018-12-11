@@ -1,0 +1,78 @@
+{
+  "name": "@modus/more",
+  "version": "1.0.0",
+  "description": "Modus React App Scaffolding",
+  "bin": "bin/more.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "React",
+    "Scaffolding"
+  ],
+  "author": "Modus Create <contact@moduscreate.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "7.2.0",
+    "@modus/eslint-config-modus": "^1.0.0",
+    "add-asset-html-webpack-plugin": "3.1.2",
+    "babel-eslint": "10.0.1",
+    "babel-loader": "8.0.4",
+    "cache-loader": "1.2.5",
+    "classnames": "2.2.6",
+    "cross-spawn": "^6.0.5",
+    "css-loader": "1.0.1",
+    "dotenv": "^6.2.0",
+    "eslint": "5.9.0",
+    "file-loader": "2.0.0",
+    "find-file-up": "^2.0.1",
+    "html-webpack-plugin": "3.2.0",
+    "husky": "1.2.0",
+    "lint-staged": "8.1.0",
+    "mini-css-extract-plugin": "0.4.5",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
+    "postcss-loader": "3.0.0",
+    "prettier": "1.15.3",
+    "react": "16.6.3",
+    "react-dom": "16.6.3",
+    "react-router": "4.3.1",
+    "react-router-dom": "4.3.1",
+    "rimraf": "2.6.2",
+    "style-loader": "0.23.1",
+    "webpack": "4.27.1",
+    "webpack-dev-server": "3.1.10",
+    "workbox-webpack-plugin": "3.6.3"
+  },
+  "optionalDependencies": {
+    "fsevents": "1.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "endOfLine": "lf"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,scss,sass,css,less}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

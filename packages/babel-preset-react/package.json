@@ -1,0 +1,13 @@
+{
+  "name": "@modus/babel-preset-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Modus Create <contact@moduscreate.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "7.2.0",
+    "@babel/plugin-proposal-class-properties": "7.2.1",
+    "@babel/preset-env": "7.2.0",
+    "@babel/preset-react": "7.0.0"
+  }
+}
