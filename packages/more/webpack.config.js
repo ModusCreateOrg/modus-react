@@ -7,6 +7,9 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 
 const projectRoot = process.env.INIT_CWD;
 
+const pkgJson = path.resolve(process.env.INIT_CWD, 'package.json');
+const pkgJsonConfig = require(pkgJson);
+
 const sourceDir = path.join(projectRoot, process.env.SOURCE_DIR);
 const buildDir = path.join(projectRoot, process.env.BUILD_DIR);
 const dllDir = path.join(__dirname, 'dll');
@@ -102,6 +105,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 module.exports = {
   mode: isProd ? 'production' : 'development',
 
+  context: sourceDir,
+
   entry: {
     app: [
       // activate HMR for React
@@ -115,6 +120,7 @@ module.exports = {
   output: {
     path: isProd ? buildDir : undefined,
     filename: isProd ? '[name].[contenthash:6].js' : '[name].js',
+    publicPath: '',
     chunkFilename: isProd
       ? '[name].[contenthash:6].chunk.js'
       : '[name].chunk.js',
@@ -150,7 +156,7 @@ module.exports = {
     // import dll manifest
     isDev &&
       new webpack.DllReferencePlugin({
-        context: path.resolve(__dirname), //path.resolve(projectRoot), //path.resolve(__dirname, '.'),
+        context: path.resolve(__dirname),
         manifest: dllManifest,
       }),
 
@@ -159,6 +165,15 @@ module.exports = {
         {},
         {
           inject: true,
+          template: process.env.TEMPLATE
+            ? path.resolve(projectRoot, process.env.TEMPLATE)
+            : path.resolve(__dirname, 'public', 'index.html'),
+          templateParameters: {
+            title: pkgJsonConfig.description || 'Modus React App',
+            themeColor: '#000000',
+            publicUrl: '/',
+            ...(pkgJsonConfig.meta || {}),
+          },
         },
         isProd
           ? {
@@ -201,19 +216,6 @@ module.exports = {
         // match the requirements. When no loader matches it will fall
         // back to the "file" loader at the end of the loader list.
         oneOf: [
-          // "url" loader works like "file" loader except that it embeds assets
-          // smaller than specified limit in bytes as data URLs to avoid requests.
-          // A missing `test` is equivalent to a match.
-          {
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
-            loader: require.resolve('url-loader'),
-            options: {
-              limit: 10000,
-              name: isProd
-                ? 'static/media/[name].[hash:8].[ext]'
-                : 'static/media/[name].[ext]',
-            },
-          },
           // Process application JS with Babel.
           // The preset includes JSX, Flow, TypeScript, and some ESnext features.
           {
@@ -230,31 +232,6 @@ module.exports = {
                   cacheDirectory: babelCacheDirectory,
                   // cacheCompression: isProd,
                   compact: isProd,
-                },
-              },
-            ],
-          },
-          // Process any JS outside of the app with Babel.
-          // Unlike the application JS, we only compile the standard ES features.
-          {
-            test: /\.(js|mjs)$/,
-            exclude: /@babel(?:\/|\\{1,2})runtime/,
-            use: [
-              {
-                loader: require.resolve('cache-loader'),
-                options: { cacheDirectory: cacheLoaderDirectory },
-              },
-              {
-                loader: require.resolve('babel-loader'),
-                options: {
-                  cacheDirectory: path.join(
-                    __dirname,
-                    '.cache',
-                    isProd ? 'prod' : 'dev'
-                  ),
-                  cacheCompression: isProd,
-                  compact: isProd,
-                  sourceMaps: false,
                 },
               },
             ],
