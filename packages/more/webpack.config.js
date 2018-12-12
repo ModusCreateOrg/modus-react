@@ -3,12 +3,17 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 
 const projectRoot = process.env.INIT_CWD;
 
 const sourceDir = path.join(projectRoot, process.env.SOURCE_DIR);
 const buildDir = path.join(projectRoot, process.env.BUILD_DIR);
-const shouldUseSourceMap = false;
+const dllDir = path.join(__dirname, 'dll');
+const dllManifest = require(path.join(dllDir, 'libs-manifest.json'));
+
+const shouldUseSourceMap =
+  process.env.SOURCEMAPS.toLowerCase() === 'false' || false;
 
 const { NODE_ENV = 'production' } = process.env;
 
@@ -67,13 +72,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
       options: cssOptions,
     },
     {
-      // Options for PostCSS as we reference these options twice
-      // Adds vendor prefixing based on your specified browser support in
-      // package.json
       loader: require.resolve('postcss-loader'),
       options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebook/create-react-app/issues/2677
         ident: 'postcss',
         plugins: () => [
           require('postcss-flexbugs-fixes'),
@@ -134,10 +134,11 @@ module.exports = {
     }),
 
     // import dll manifest
-    // new webpack.DllReferencePlugin({
-    //   context: path.resolve(__dirname, '.'),
-    //   manifest: dllManifest,
-    // }),
+    isDev &&
+      new webpack.DllReferencePlugin({
+        context: path.resolve(__dirname), //path.resolve(projectRoot), //path.resolve(__dirname, '.'),
+        manifest: dllManifest,
+      }),
 
     new HtmlWebpackPlugin(
       Object.assign(
@@ -165,12 +166,13 @@ module.exports = {
     ),
 
     // make DLL assets available for the app to download
-    // new AddAssetHtmlPlugin([
-    //   {
-    //     filepath: require.resolve('./dll/libs.dll.js'),
-    //     includeSourcemap: false,
-    //   },
-    // ]),
+    isDev &&
+      new AddAssetHtmlPlugin([
+        {
+          filepath: path.join(dllDir, 'libs.dll.js'),
+          includeSourcemap: false,
+        },
+      ]),
 
     isDev && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean),

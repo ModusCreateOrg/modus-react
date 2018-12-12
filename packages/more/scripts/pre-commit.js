@@ -1,1 +1,1 @@
-require('lint-staged')
+require('lint-staged');

@@ -12,6 +12,8 @@
   },
   "scripts": {
     "start": "more start",
-    "build": "more build"
+    "build": "more build",
+    "dll": "more dll",
+    "postinstall": "more dll"
   }
 }
