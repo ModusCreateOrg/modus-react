@@ -2,3 +2,4 @@
 **/*.log
 /packages/more/.cache
 /packages/more/dll
+/packages/sample/build

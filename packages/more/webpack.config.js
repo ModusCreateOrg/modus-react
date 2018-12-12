@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const projectRoot = process.env.INIT_CWD;
 
@@ -17,6 +19,8 @@ const dllManifest = require(path.join(dllDir, 'libs-manifest.json'));
 
 const shouldUseSourceMap =
   process.env.SOURCEMAPS.toLowerCase() === 'false' || false;
+
+const publicUrl = process.env.PUBLIC_URL || '/';
 
 const { NODE_ENV = 'production' } = process.env;
 
@@ -168,10 +172,13 @@ module.exports = {
           template: process.env.TEMPLATE
             ? path.resolve(projectRoot, process.env.TEMPLATE)
             : path.resolve(__dirname, 'public', 'index.html'),
+          favicon: process.env.FAVICON
+            ? path.resolve(projectRoot, process.env.FAVICON)
+            : path.resolve(__dirname, 'public', 'favicon.ico'),
           templateParameters: {
             title: pkgJsonConfig.description || 'Modus React App',
             themeColor: '#000000',
-            publicUrl: '/',
+            publicUrl,
             ...(pkgJsonConfig.meta || {}),
           },
         },
@@ -194,6 +201,30 @@ module.exports = {
       )
     ),
 
+    // Inline webpack runtime JS into the HTML
+    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
+
+    isProd &&
+      new WorkboxWebpackPlugin.GenerateSW({
+        clientsClaim: true,
+        exclude: [/\.map$/, /asset-manifest\.json$/],
+        importWorkboxFrom: 'cdn',
+        navigateFallback: `${publicUrl}/index.html`,
+        navigateFallbackBlacklist: [
+          // Exclude URLs starting with /_, as they're likely an API call
+          new RegExp('^/_'),
+          // Exclude URLs containing a dot, as they're likely a resource in
+          // public/ and not a SPA route
+          new RegExp('/[^/]+\\.[^/]+$'),
+        ],
+      }),
+
+    isProd &&
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash:6].css',
+        chunkFilename: 'static/css/[name].[contenthash:6].chunk.css',
+      }),
+
     // make DLL assets available for the app to download
     isDev &&
       new AddAssetHtmlPlugin([
@@ -204,6 +235,9 @@ module.exports = {
       ]),
 
     isDev && new webpack.HotModuleReplacementPlugin(),
+
+    // Ignore moment locales
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ].filter(Boolean),
 
   module: {
