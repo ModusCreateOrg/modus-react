@@ -101,10 +101,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 
 module.exports = {
   mode: isProd ? 'production' : 'development',
-  optimization: {
-    namedModules: true,
-    noEmitOnErrors: true,
-  },
+
   entry: {
     app: [
       // activate HMR for React
@@ -120,7 +117,24 @@ module.exports = {
     filename: isProd ? '[name].[contenthash:6].js' : '[name].js',
     chunkFilename: isProd
       ? '[name].[contenthash:6].chunk.js'
-      : '[chunkname].chunk.js',
+      : '[name].chunk.js',
+  },
+
+  devtool: isProd
+    ? shouldUseSourceMap
+      ? 'source-map'
+      : false
+    : isDev && 'cheap-module-source-map',
+
+  optimization: {
+    minimize: isProd,
+    namedModules: true,
+    noEmitOnErrors: true,
+    runtimeChunk: true,
+    splitChunks: {
+      chunks: 'all',
+      name: false,
+    },
   },
 
   plugins: [
@@ -191,11 +205,13 @@ module.exports = {
           // smaller than specified limit in bytes as data URLs to avoid requests.
           // A missing `test` is equivalent to a match.
           {
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
+              name: isProd
+                ? 'static/media/[name].[hash:8].[ext]'
+                : 'static/media/[name].[ext]',
             },
           },
           // Process application JS with Babel.
@@ -324,7 +340,9 @@ module.exports = {
             // by webpacks internal loaders.
             exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
             options: {
-              name: 'static/media/[name].[hash:8].[ext]',
+              name: isProd
+                ? 'static/media/[name].[hash:8].[ext]'
+                : 'static/media/[name].[ext]',
             },
           },
           // ** STOP ** Are you adding a new loader?
@@ -335,8 +353,20 @@ module.exports = {
   },
 
   resolve: {
-    modules: [path.resolve(__dirname, './node_modules'), sourceDir],
+    modules: [
+      'node_modules',
+      path.resolve(__dirname, './node_modules'),
+      sourceDir,
+    ],
     symlinks: false,
+  },
+
+  performance: {
+    hints: isProd && 'warning',
+    maxEntrypointSize: 400000,
+    assetFilter: function(assetFilename) {
+      return assetFilename.endsWith('.js');
+    },
   },
 
   stats,
