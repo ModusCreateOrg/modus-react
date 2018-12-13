@@ -272,7 +272,7 @@ module.exports = {
                 loader: require.resolve('babel-loader'),
                 options: {
                   cacheDirectory: babelCacheDirectory,
-                  // cacheCompression: isProd,
+                  cacheCompression: isProd,
                   compact: isProd,
                 },
               },
