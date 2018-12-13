@@ -100,6 +100,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
       loader: require.resolve(preProcessor),
       options: {
         sourceMap: isProd && shouldUseSourceMap,
+        includePaths: [sourceDir],
       },
     });
   }
@@ -126,7 +127,7 @@ module.exports = {
     // small performance boost in development
     pathinfo: isProd,
     filename: isProd ? '[name].[contenthash:6].js' : '[name].js',
-    publicPath: '',
+    publicPath: publicUrl,
     chunkFilename: isProd
       ? '[name].[contenthash:6].chunk.js'
       : '[name].chunk.js',
@@ -305,7 +306,7 @@ module.exports = {
               importLoaders: 1,
               sourceMap: isProd && shouldUseSourceMap,
               modules: true,
-              getLocalIdent: isProd
+              localIdentName: isProd
                 ? '[hash:base64:5]'
                 : '[path][name]__[local]',
             }),
@@ -338,7 +339,7 @@ module.exports = {
                 importLoaders: 2,
                 sourceMap: isProd && shouldUseSourceMap,
                 modules: true,
-                getLocalIdent: isProd
+                localIdentName: isProd
                   ? '[hash:base64:5]'
                   : '[path][name]__[local]',
               },
@@ -381,7 +382,8 @@ module.exports = {
 
   performance: {
     hints: isProd && 'warning',
-    maxEntrypointSize: 400000,
+    maxEntrypointSize: 420000,
+    maxAssetSize: 360000,
     assetFilter: function(assetFilename) {
       return assetFilename.endsWith('.js');
     },
@@ -399,7 +401,7 @@ module.exports = {
 
   devServer: {
     contentBase: sourceDir,
-    publicPath: '/',
+    publicPath: publicUrl,
     historyApiFallback: {
       rewrites: [{ from: /./, to: '/index.html' }],
     },
