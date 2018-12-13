@@ -1,14 +1,14 @@
 {
   "name": "@modus/more-sample",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Modus React scaffolding example",
   "main": "index.js",
   "license": "MIT",
   "author": "Modus Create <contact@moduscreate.com>",
   "dependencies": {
-    "@modus/babel-preset-react": "^1.0.0",
-    "@modus/eslint-config-modus": "^1.0.0",
-    "@modus/more": "^1.0.0"
+    "@modus/babel-preset-react": "^0.0.2",
+    "@modus/eslint-config-modus": "^0.0.2",
+    "@modus/more": "^0.0.2"
   },
   "scripts": {
     "start": "more start",

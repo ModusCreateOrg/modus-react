@@ -1,12 +1,17 @@
 {
-  "packages": ["packages/*"],
-  "version": "0.0.1",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.0.2",
   "command": {
     "publish": {
       "npmClient": "npm",
       "registry": "https://npm.modus.app/",
       "verifyAccess": false,
-      "ignoreChanges": ["*.md", "tests/*"]
+      "ignoreChanges": [
+        "*.md",
+        "tests/*"
+      ]
     }
   },
   "npmClient": "yarn"

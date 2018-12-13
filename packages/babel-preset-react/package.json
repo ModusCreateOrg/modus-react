@@ -1,6 +1,6 @@
 {
   "name": "@modus/babel-preset-react",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "Modus Create <contact@moduscreate.com>",
   "license": "MIT",
