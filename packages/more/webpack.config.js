@@ -123,6 +123,8 @@ module.exports = {
 
   output: {
     path: isProd ? buildDir : undefined,
+    // small performance boost in development
+    pathinfo: isProd,
     filename: isProd ? '[name].[contenthash:6].js' : '[name].js',
     publicPath: '',
     chunkFilename: isProd
@@ -141,7 +143,12 @@ module.exports = {
     namedModules: true,
     noEmitOnErrors: true,
     runtimeChunk: true,
-    splitChunks: {
+    // faster dev build
+    removeEmptyChunks: isProd,
+    // faster dev build
+    removeAvailableModules: isProd,
+    // faster dev build if no splitChunks
+    splitChunks: isProd && {
       chunks: 'all',
       name: false,
     },
