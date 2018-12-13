@@ -380,8 +380,8 @@ module.exports = {
     symlinks: false,
   },
 
-  performance: {
-    hints: isProd && 'warning',
+  performance: isProd && {
+    hints: 'warning',
     maxEntrypointSize: 420000,
     maxAssetSize: 360000,
     assetFilter: function(assetFilename) {
