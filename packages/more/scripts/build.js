@@ -40,5 +40,31 @@ rimraf(buildDir, {}, () => {
   copyPublicFolder();
 
   // run webpack
-  compiler.run();
+  compiler.run((err, stats) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    console.log(
+      stats.toString({
+        chunks: false,
+        modules: false,
+        children: false,
+        colors: {
+          green: '\u001b[32m',
+        },
+      })
+    );
+
+    const info = stats.toJson();
+
+    if (stats.hasErrors()) {
+      console.error(info.errors);
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn(info.warnings);
+    }
+  });
 });
