@@ -3,6 +3,9 @@
   "version": "0.0.4",
   "description": "Modus React App Scaffolding",
   "bin": "bin/more.js",
+  "engines": {
+    "node": ">=8.9.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +26,7 @@
     "cross-spawn": "^6.0.5",
     "css-loader": "1.0.1",
     "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
     "eslint": "5.9.0",
     "file-loader": "2.0.0",
     "find-file-up": "^2.0.1",

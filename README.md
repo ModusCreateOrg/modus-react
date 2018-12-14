@@ -2,6 +2,29 @@
 
 Monorepo containing setup for a best-practice React application scaffolding
 
+### ENV variables
+
+You can use environment variables to configure build scripts.
+
+Here's the list of supported variables with their defaults:
+
+```
+SOURCE_DIR=src
+BUILD_DIR=build
+SOURCEMAPS=false
+```
+
+You can override any of these variables with `.env` files. We support these formats (in the order of inclusion):
+
+```
+.env.${NODE_ENV}.local
+.env.${NODE_ENV}
+.env.local
+.env
+```
+
+The order of inclusion means that anything in `.env` will override content in e.g. `.env.development.local`.
+
 ### DLLs
 
 DLLs precompile libraries to save time for development builds and re-builds.
