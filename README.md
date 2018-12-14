@@ -2,6 +2,16 @@
 
 Monorepo containing setup for a best-practice React application scaffolding
 
+### Installing
+
+```bash
+npm i @modus/babel-preset-react @modus/eslint-config-modus @modus/more --registry=https://npm.modus.app/
+```
+
+Then use [sample project](../sample) as a basis for setting up `package.json`, `.eslintrc.yml`, and `babel.config.js`.
+
+**TODO:** use `modus` CLI to do that automatically
+
 ### ENV variables
 
 You can use environment variables to configure build scripts.
