@@ -22,6 +22,12 @@ MORe encourages specific design patterns that are enterprise-friendly. We discou
 npm i @modus/babel-preset-react @modus/eslint-config-modus @modus/more --registry=https://npm.modus.app/
 ```
 
+or shorter
+
+```bash
+npm i @modus/{babel-preset-react,eslint-config-modus,more} --registry=https://npm.modus.app/
+```
+
 Then use [sample project](../sample) as a basis for setting up `package.json`, `.eslintrc.yml`, and `babel.config.js`.
 
 **TODO:** use `modus` CLI to do that automatically
