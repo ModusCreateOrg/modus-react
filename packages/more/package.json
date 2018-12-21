@@ -86,5 +86,12 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/html-webpack-plugin": "^3.2.0",
+    "@types/mini-css-extract-plugin": "^0.2.0",
+    "@types/node": "^10.12.18",
+    "@types/webpack": "^4.4.21",
+    "@types/webpack-dev-server": "^3.1.1"
+  }
 }

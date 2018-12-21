@@ -47,6 +47,8 @@ rimraf(buildDir, {}, () => {
     }
 
     console.log(
+      // todo: remove when https://github.com/DefinitelyTyped/DefinitelyTyped/pull/31583 is merged
+      // @ts-ignore: ANSI escape codes are not supported using current typings
       stats.toString({
         chunks: false,
         modules: false,

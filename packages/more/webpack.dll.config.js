@@ -1,3 +1,4 @@
+// @ts-check
 const webpack = require('webpack');
 const path = require('path');
 
@@ -7,7 +8,10 @@ const pkgJson = path.resolve(process.env.INIT_CWD, 'package.json');
 const config = require(pkgJson);
 const customLibs = Array.isArray(config && config.dll) ? config.dll : [];
 
-module.exports = {
+/**
+ * @type {import('webpack').Configuration}
+ */
+const webpackConfig = {
   mode: 'development',
   entry: {
     libs: [
@@ -41,3 +45,5 @@ module.exports = {
     }),
   ],
 };
+
+module.exports = webpackConfig;

@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+// @ts-check
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -39,8 +39,6 @@ const stats = {
   },
 };
 
-process.noDeprecation = true;
-
 const isProd = NODE_ENV === 'production';
 const isDev = !isProd;
 
@@ -63,23 +61,31 @@ const cacheLoaderDirectory = path.join(
   isProd ? 'prod' : 'dev'
 );
 
-// common function to get style loaders
-const getStyleLoaders = (cssOptions, preProcessor) => {
-  const loaders = [
+/**
+ * Common function to get style loaders
+ * @param {Object} cssOptions
+ * @param {string=} preProcessor
+ * @return { import('webpack').RuleSetUseItem[] }
+ *
+ */
+const getStyleLoaders = (cssOptions, preProcessor) =>
+  // todo: fix MiniCssExtractPlugin.loader type issue
+  // @ts-ignore: There seems to be an issue with MiniCssExtractPlugin.loader
+  [
     isDev && {
-      loader: require.resolve('cache-loader'),
+      loader: 'cache-loader',
       options: { cacheDirectory: cacheLoaderDirectory },
     },
-    isDev && require.resolve('style-loader'),
+    isDev && 'style-loader',
     isProd && {
       loader: MiniCssExtractPlugin.loader,
     },
     {
-      loader: require.resolve('css-loader'),
+      loader: 'css-loader',
       options: cssOptions,
     },
     {
-      loader: require.resolve('postcss-loader'),
+      loader: 'postcss-loader',
       options: {
         ident: 'postcss',
         plugins: () => [
@@ -94,20 +100,19 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         sourceMap: isProd && shouldUseSourceMap,
       },
     },
-  ].filter(Boolean);
-  if (preProcessor) {
-    loaders.push({
-      loader: require.resolve(preProcessor),
+    preProcessor && {
+      loader: preProcessor,
       options: {
         sourceMap: isProd && shouldUseSourceMap,
         includePaths: [sourceDir],
       },
-    });
-  }
-  return loaders;
-};
+    },
+  ].filter(Boolean);
 
-module.exports = {
+/**
+ * @type {import('webpack').Configuration}
+ */
+const webpackConfig = {
   mode: isProd ? 'production' : 'development',
 
   context: sourceDir,
@@ -133,11 +138,8 @@ module.exports = {
       : '[name].chunk.js',
   },
 
-  devtool: isProd
-    ? shouldUseSourceMap
-      ? 'source-map'
-      : false
-    : isDev && 'cheap-module-source-map',
+  devtool:
+    shouldUseSourceMap && isProd ? 'source-map' : 'cheap-module-source-map',
 
   optimization: {
     minimize: isProd,
@@ -155,6 +157,8 @@ module.exports = {
     },
   },
 
+  // todo: fix WorkboxWebpackPlugin.GenerateSW to return the Plugin type
+  // @ts-ignore: WorkboxWebpackPlugin doesn't have typings
   plugins: [
     // setting production environment will strip out
     // some of the development code from the app
@@ -238,7 +242,7 @@ module.exports = {
       new AddAssetHtmlPlugin([
         {
           filepath: path.join(dllDir, 'libs.dll.js'),
-          includeSourcemap: false,
+          includeRelatedFiles: false,
         },
       ]),
 
@@ -389,6 +393,8 @@ module.exports = {
     },
   },
 
+  // todo: remove when https://github.com/DefinitelyTyped/DefinitelyTyped/pull/31583 is merged
+  // @ts-ignore: ANSI escape codes are not supported using current typings
   stats,
 
   node: {
@@ -415,6 +421,11 @@ module.exports = {
     inline: true,
     compress: false,
     disableHostCheck: true,
+
+    // todo: remove when https://github.com/DefinitelyTyped/DefinitelyTyped/pull/31583 is merged
+    // @ts-ignore: ANSI escape codes are not supported using current typings
     stats,
   },
 };
+
+module.exports = webpackConfig;
