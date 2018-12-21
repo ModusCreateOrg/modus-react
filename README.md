@@ -134,6 +134,12 @@ You can use the same command to add monorepo packages to one another (similar to
 lerna add @modus/eslint-config-modus --scope @modus/more
 ```
 
+### Type safety
+
+This project uses JSDoc annotations to provide type information in JS files via TypeScript. This works extremely well with VS Code, adds Intellisense, and doesn't require a build step.
+
+See the [official docs](https://github.com/Microsoft/TypeScript/wiki/JSDoc-support-in-JavaScript) for more information.
+
 ### Publishing
 
 The project is currently published to Modus internal npm repo [https://npm.modus.app](https://npm.modus.app). This will change once we have a stable project.
